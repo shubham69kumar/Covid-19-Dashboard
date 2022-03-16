@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    {% load mathfilters %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'des.css'%}">
+    <script src="https://kit.fontawesome.com/87b0ff488c.js" crossorigin="anonymous"></script>
+    
+    <style>
+        
+        .navbar .search-container{
+            float: right;
+            padding-top: 20px;
+        }
+        .navbar .search-container button {
+        float: right;
+        padding: 6px 10px;
+        margin-right: 16px;
+        background: #ddd;
+        font-size: 17px;
+        border: none;
+        cursor: pointer;
+        }
+        .navbar .search-container button:hover {
+            background: #ccc;
+        }
+        
+        .navbar input[type=text] {
+        padding: 6px;
+       
+        font-size: 17px;
+        border: none;
+        }
+       
+    </style>
+    <title></title>
+</head>
+<body class = 'body'>
+    <div class="navbar">
+        <a href="#body">Home</a>
+        <a href="{% url 'help' %}" >Awareness</a>
+        <a style="margin-left: 450px;" href="{% url 'Ind' %}"> Covid India</a>
+    
+        <div class="search-container">
+            <form action="{% url 'search-state' %}" method="post" >
+                {% csrf_token %}
+              <input type="text" placeholder="State name.." name="search">
+              <button type="submit"><i class="fa fa-search"></i></button>
+            </form>
+            
+        </div>
+        
+      </div>
+    <div class="row" id="body">
+        <div class="Positive" style="font-size: 25px;" >Positive Case<br>
+           <p style="float: left; padding-left: 15px; padding-top: 8px;">New Update =</p>
+           <p style="padding-right: 50px; padding-bottom: 8px; padding-top: 8px; color: red;"> {{india_data.0.new_infected__sum }}&#8593<br></p>
+           <p style="float: left; padding-left: 15px;">Total =</p>
+           <p style="padding-right: 105px;">
+            {{total.0.4}}
+           </p>
+        </div>
+        <div class="Death" style="font-size: 25px">Active Case<br>
+            <p style="float: left; padding-left: 15px; padding-top: 8px;">New Update =</p>
+            {% if india_data.1.new_infected__sum > 0 %}
+            <p style="padding-right: 50px; padding-bottom: 8px; padding-top: 8px; color: red;">{{india_data.1.new_infected__sum }}&#8593<br></p>
+            {% else %}
+            <p style="padding-right: 50px; padding-bottom: 8px; padding-top: 8px;color: green;">{{india_data.1.new_infected__sum|abs }}&#8595<br> </p>
+            {% endif %}
+            <p style="float: left; padding-left: 15px;">Total =</p>
+            <p style="padding-right: 105px;">
+            {{total.0.3}}
+            </p>
+        </div>
+        <div class="Recovered" style="font-size: 25px">Death<br>
+            <p style="float: left; padding-left: 35px; padding-top: 8px;">New Update =</p>
+            <p style="padding-right: 50px; padding-bottom: 8px; padding-top: 8px; color: red;">{{india_data.3.new_decreased__sum}}&#8593<br></p>
+            <p style="float: left; padding-left: 35px;">Total =</p>
+            <p style="padding-right: 105px;">
+            {{total.0.1}}
+            </p>
+        </div>
+        <div class="Recovered" style="font-size: 25px">Recovery<br>
+            <p style="float: left; padding-left: 25px; padding-top: 8px;">New Update =</p>
+            <p style="padding-right: 30px; padding-bottom: 8px; padding-top: 8px; color: green;">{{india_data.2.new_recovered__sum}}&#8593<br></p>
+            <p style="float: left; padding-left: 25px;">Total =</p>
+            <p style="padding-right: 105px;">
+            {{total.0.2}}
+            </p>
+        </div>
+    </div>
+    <div class="Update">
+        <a onclick="location.href='{% url 'get_data' %}'"><button class="butt">Update</button></a>
+        <p>
+            <span class="blink">Last updated on : {{output_data}}</span>
+        </p>      
+    </div>
+    <div class="State" style="width: 95%;">
+        <p style="font-size: 30px; font-weight: bold; padding: 15px 32px; padding-left: 50px;">COVID-19 Statewise Status<p>
+        <table class="covid" style="margin-right: 15px; margin-left: 50px; " >
+            <thead>
+                <tr>
+                    <th style="width: 4%;">S.No.</th>
+                    <th style="width: 20%;">Name of State/UT</th>
+                    <th style="width: 19%;">Infected Case
+                        <table class="covid">
+                            <th style="width: 50%;">Total</th>
+                            <th style="width: 50%;">Change since yesterday</th>
+                        </table>
+                    </th>
+                    <th style="width: 19%;">Active Cases 
+                        <table class="covid">
+                            <th style="width: 50%;">Total</th>
+                            <th style="width: 50%;">Change since yesterday</th>
+                        </table>
+                    </th>
+                    <th style="width: 19%;">Cured/Discharged
+                        <table class="covid">
+                            <th style="width: 50%;">Total</th>
+                            <th style="width: 50%;">Change since yesterday</th>
+                        </table>
+                    </th>
+                    <th style="width: 19%;">Death
+                        <table class="covid">
+                            <th style="width: 50%;">Total</th>
+                            <th style="width: 50%;">Change since yesterday</th>
+                        </table>
+                    </th>
+                </tr>
+            </thead>
+            {% for a, b in data  %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{a.0}}</td>
+                    <td>
+                        <table class ='covid_data' >
+                            <tr>
+                                <th style="width: 50%;">{{a.4}}</th>
+                                {% if a.5 >= 0 %}
+                                <th style="width: 50%; color:red;">{{a.5}} &#8593;</th>
+                                {% else %}
+                                <th style="width: 50%; color:limegreen;">{{a.5|abs}} &#8593;</th>
+                                {% endif %}
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table class ='covid_data' >
+                            <tr>
+                                <th style="width: 50%;">{{a.2}}</th>
+                                {% if a.3 >= 0 %}
+                                <th style="width: 50%; color: red; ">{{a.3}} &#8593</th>
+                                {% else %}
+                                <th style="width: 50%; color:limegreen; ">{{ a.3|abs }} &#8595;</th>
+                                {% endif %}
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table class ='covid_data' >
+                            <tr>
+                                <th style="width: 50%;">{{b.2}}</th>
+                                {% if b.3 >= 0 %}
+                                <th style="width: 50%; color:limegreen">{{b.3}} &#8593</th>
+                                {% else %}
+                                <th style="width: 50%; color:red">{{b.3}} &#8593</th>
+                                {% endif %}
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table class ='covid_data' >
+                            <tr>
+                                <th style="width: 50%;">{{b.4}}</th>
+                                {% if b.5 > 0 %}
+                                <th style="width: 50%; color: red;">{{b.5}} &#8593</th>
+                                {% else %}
+                                <th style="width: 50%; ">{{b.5}}</th>
+                                {% endif %}
+                                </tr>
+                        </table>
+                    </td>
+                    
+                </tr>
+            {% endfor %}
+                
+        </table>
+    </div>
+
+    <footer>
+        <p>Disclaimer:
+        <p>Website content is taken from:</p>
+        <a href="https://www.mohfw.gov.in/" style="color: darkorange;"> Ministry of Health and Family Welfare</p>
+        
+        <p style="color: aliceblue;">Design and Developed By:Shubham & Suffiyan</p>
+    </p>
+    </footer>
+
+</body>
+</html>

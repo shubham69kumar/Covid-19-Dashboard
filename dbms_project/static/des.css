@@ -1,0 +1,173 @@
+*{
+    margin :0;
+    padding :0;
+    list-style:none;
+    text-decoration:none;
+    
+
+}
+
+.navbar {
+  overflow: hidden;
+  background-color: #333;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+
+}
+
+.navbar a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 25px;
+}
+
+.navbar a:hover {
+  background: #ddd;
+  color: black;
+}
+
+
+
+.row {
+ float: left;
+  width: 95%;
+  text-align:left;
+  border-style:groove;
+  margin-top: 30px;
+  margin: 15px;
+  padding: 10px;
+  height: 200px;
+  background-color:LightGray;
+  
+}
+
+.Active {
+  float: left;
+  width: 21%;
+  text-align:center;
+  border-style: groove;
+  margin: 15px;
+  border: 2px solid green;
+  padding: 10px;
+  height: 150px;
+  background-color:white;
+}
+.Death {
+  float: left;
+  width: 21%;
+  text-align:center;
+  border-style: groove;
+  margin: 15px;
+  border: 2px solid green;
+  padding: 10px;
+  height: 150px;
+  background-color:white;
+}
+.Recovered {
+  float: left;
+  width: 21%;
+  text-align:center;
+  border-style: groove;
+  margin:15px;
+  border: 2px solid green;
+  padding: 10px;
+  height: 150px;
+  background-color:white;
+}
+.Positive {
+  float: left;
+  width: 21%;
+  text-align:center;
+  border-style: groove;
+  margin:15px;
+  border: 2px solid green;
+  padding: 10px;
+  height: 150px;
+  background-color:white;
+}
+.fas fa-virus{
+  color: blue;
+}
+.Update{
+  text-align: center;
+  color: red;
+}
+
+.Update .butt{
+  background-color: #4CAF50; 
+  border-style: groove;
+  border: 2px solid green;
+  color: black;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  font-weight:500;
+}
+
+.butt:hover {
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+.Update .blink{
+  animation: animate   2s linear infinite;
+}
+@keyframes animate {
+  100% {
+      opacity: 0.4;
+  }
+
+  50% {
+      opacity: 0.5;
+  }
+
+  100% {
+      opacity: 0;
+  }
+}
+
+.State .covid{
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  font-weight:400px;
+  
+  
+}
+.State .covid td,th,tr{
+  border: 1px solid green;
+  text-align: center;
+  padding: 8px;
+  font-weight: 400px;
+ 
+}
+.State tr:nth-child(even){background-color: #f2f2f2;}
+.State tr:hover {background-color: #ddd;}
+
+.State .covid .covid_data{
+  font-weight: 400px;
+  width: 100%;
+  border-collapse: collapse;
+  
+
+}
+.State .covid .covid_data td,th,tr{
+  border: 1px solid green;
+  text-align: center;
+  padding: 8px;
+  font-weight: 400px;
+  
+}
+footer {
+  text-align: center;
+  margin-top: 50px;
+  padding: 20px;
+  background-color:#333;
+  color: white;
+}

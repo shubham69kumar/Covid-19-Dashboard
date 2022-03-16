@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    {% load mathfilters %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="{% static 'sta.css'%}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <title>India</title>
+</head>
+<body>
+    <div class="State" style="width: 95%;">
+        <p style="font-size: 30px; font-weight: bold; padding: 15px 32px; padding-left: 50px;">Last week COVID-19 Status of India<p>
+        <table class="covid" style="margin-right: 15px; margin-left: 50px; " >
+            <thead>
+                <tr>
+                    <th style="width: 4%;">S.No.</th>
+                    <th style="width: 20%;">Date</th>
+                    <th style="width: 19%;">Infected Case
+                    </th>
+                    <th style="width: 19%;">Active Cases 
+                    </th>
+                    <th style="width: 19%;">Cured/Discharged
+                    </th>
+                    <th style="width: 19%;">Death
+                    </th>
+                </tr>
+            </thead>
+            {% for a in data_  %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{a.0}}</td>
+                    {% if a.1.new_infected__sum >= 0 %}
+                    <td style="color: red;">{{a.1.new_infected__sum}} &#8593</td>
+                    {% else %}
+                    <td style="color: green;">{{a.1.new_infected__sum}} &#8595</td>
+                    {% endif %}
+                    {% if a.2.new_infected__sum >= 0 %}
+                    <td style="color:red;">{{a.2.new_infected__sum}} &#8593</td>
+                    {% else %}
+                    <td style="color:green;">{{a.2.new_infected__sum|abs}} &#8595</td>
+                    {% endif %}
+                    <td style="color: green;">{{a.3.new_recovered__sum}} &#8593</td>
+                    <td style="color:red;">{{a.4.new_decreased__sum}} &#8593</td>  
+                </tr>
+            {% endfor %}
+                
+        </table>
+    </div>
+    <div class ="chart">
+        <div>
+            <canvas id="myChart" width="100" height="30"></canvas>
+        </div>
+        <script>
+            const labels = [{% for x in date %} '{{x}}', {% endfor %}];
+          
+            const data = {
+              labels: labels,
+              datasets: [{
+                label: 'Infected',
+                backgroundColor: 'transparent',
+                borderColor: 'rgb(123, 36, 28)',
+                data: [{% for y in data_ %} '{{y.1.new_infected__sum}}', {% endfor %}],
+              },
+              {
+                label: 'Cured',
+                backgroundColor: 'transparent',
+                borderColor: 'rgb(24, 106, 59)',
+                data: [{% for y in data_ %} '{{y.3.new_recovered__sum}}',{% endfor %}],
+              },
+              {
+                label: 'Active',
+                backgroundColor: 'transparent',
+                borderColor: 'rgb(93, 173, 226 )',
+                data: [{% for y in data_ %} '{{y.2.new_infected__sum|abs}}',{% endfor %}],
+              },
+              {
+                label: 'Death',
+                backgroundColor: 'transparent',
+                borderColor: 'rgb(186, 74, 0 )',
+                data: [{% for y in data_ %} '{{y.4.new_decreased__sum}}',{% endfor %}],
+              }
+            ]
+              
+            };
+          
+            const config = {
+              type: 'line',
+              data: data,
+              options: {}
+            };
+          </script>
+          <script>
+            const myChart = new Chart(
+              document.getElementById('myChart'),
+              config
+            );
+          </script>
+    </div>
+    
+    <div class ="chart">
+      <canvas id="chart" width="100" height="30"></canvas>
+      <script>
+          let ctx = document.getElementById("chart").getContext("2d");
+      
+      let chart = new Chart(ctx, {
+        type: "bar",
+        data: {
+           labels: [{% for x in date %} '{{x}}', {% endfor %}],
+           datasets: [
+              {
+                label: 'Infected',
+                backgroundColor: 'rgb(123, 36, 28)',
+                borderColor: 'rgb(123, 36, 28)',
+                data: [{% for y in data_ %} '{{y.1.new_infected__sum}}', {% endfor %}],
+              },
+              {
+                label: 'Cured',
+                backgroundColor: 'rgb(24, 106, 59)',
+                borderColor: 'rgb(24, 106, 59)',
+                data: [{% for y in data_ %} '{{y.3.new_recovered__sum}}',{% endfor %}],
+              },
+              {
+                label: 'Active',
+                backgroundColor: 'rgb(93, 173, 226)',
+                borderColor: 'rgb(93, 173, 226)',
+                data: [{% for y in data_ %} '{{y.2.new_infected__sum|abs}}',{% endfor %}],
+              },
+              {
+                label: 'Death',
+                backgroundColor: 'rgb(186, 74, 0)',
+                borderColor: 'rgb(186, 74, 0)',
+                data: [{% for y in data_ %} '{{y.4.new_decreased__sum}}',{% endfor %}],
+              }
+           ]
+        },
+        options: {
+           title: {
+              text: "Bar-Chart",
+              display: true
+           }
+        }
+      });
+      </script>
+  
+    </div>
+    <div>
+      <canvas id="pieChart" style="margin-left: 10px; padding-top: 30px;" width="100" height="20" ></canvas>
+
+      <script>
+      var barColors = [
+        "#b91d47",
+        "#00aba9",
+        "#2b5797",
+        "#e8c3b9",
+        "#1e7145",
+        "#D4AC0D",
+        "#8E44AD"
+      ];
+      
+      new Chart("pieChart", {
+        type: "pie",
+        data: {
+          labels:  [{% for x in date %} '{{x}}', {% endfor %}],
+          datasets: [{
+            backgroundColor: barColors,
+            data: [{% for y in data_ %} '{{y.2.new_infected__sum|abs}}',{% endfor %}]
+          }
+          ]
+        },
+        options: {
+          title: {
+            display: true,
+            text: "Active"
+          }
+        }
+      });
+      </script>
+    </div>
+    <div>
+      <canvas id="pieChart1" style="margin-left: 10px; padding-top: 30px;" width="100" height="20" ></canvas>
+
+      <script>
+      var barColors = [
+        "#b91d47",
+        "#00aba9",
+        "#2b5797",
+        "#e8c3b9",
+        "#1e7145",
+        "#D4AC0D",
+        "#8E44AD"
+      ];
+      
+      new Chart("pieChart1", {
+        type: "pie",
+        data: {
+          labels:  [{% for x in date %} '{{x}}', {% endfor %}],
+          datasets: [{
+            backgroundColor: barColors,
+            data: [{% for y in data_ %} '{{y.1.new_infected__sum}}', {% endfor %}]
+          }
+          ]
+        },
+        options: {
+          title: {
+            display: true,
+            text: "Infected"
+          }
+        }
+      });
+      </script>
+    </div>
+    <div>
+      <canvas id="pieChart2" style="margin-left: 10px; padding-top: 30px;" width="100" height="20" ></canvas>
+
+      <script>
+      var barColors = [
+        "#b91d47",
+        "#00aba9",
+        "#2b5797",
+        "#e8c3b9",
+        "#1e7145",
+        "#D4AC0D",
+        "#8E44AD"
+      ];
+      
+      new Chart("pieChart2", {
+        type: "pie",
+        data: {
+          labels:  [{% for x in date %} '{{x}}', {% endfor %}],
+          datasets: [{
+            backgroundColor: barColors,
+            data: [{% for y in data_ %} '{{y.3.new_recovered__sum}}',{% endfor %}]
+          }
+          ]
+        },
+        options: {
+          title: {
+            display: true,
+            text: "Recovery"
+          }
+        }
+      });
+      </script>
+    </div>
+    <div>
+      <canvas id="pieChart3" style="margin-left: 10px; padding-top: 30px;" width="100" height="20" ></canvas>
+
+      <script>
+      var barColors = [
+        "#b91d47",
+        "#00aba9",
+        "#2b5797",
+        "#e8c3b9",
+        "#1e7145",
+        "#D4AC0D",
+        "#8E44AD"
+      ];
+      
+      new Chart("pieChart3", {
+        type: "pie",
+        data: {
+          labels:  [{% for x in date %} '{{x}}', {% endfor %}],
+          datasets: [{
+            backgroundColor: barColors,
+            data: [{% for y in data_ %} '{{y.4.new_decreased__sum}}',{% endfor %}]
+          }
+          ]
+        },
+        options: {
+          title: {
+            display: true,
+            text: "Death"
+          }
+        }
+      });
+      </script>
+    </div>
+    
+
+
+
+    <footer>
+        <p>Disclaimer:
+        <p>Website content is taken from:</p>
+        <a href="https://www.mohfw.gov.in/" style="color: darkorange;"> Ministry of Health and Family Welfare</p>
+        
+        <p style="color: aliceblue;">Design and Developed By:Shubham & Suffiyan</p>
+    </p>
+    </footer>
+
+    
+</body>
+</html>
