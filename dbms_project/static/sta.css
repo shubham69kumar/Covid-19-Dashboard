@@ -1,0 +1,51 @@
+*{
+    margin :0;
+    padding :0;
+    list-style:none;
+    text-decoration:none;
+
+}
+.State .covid{
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  font-weight:400px;
+  
+  
+}
+.State .covid td,th,tr{
+  border: 1px solid green;
+  text-align: center;
+  padding: 8px;
+  font-weight: 400px;
+ 
+}
+.State tr:nth-child(even){background-color: #f2f2f2;}
+.State tr:hover {background-color: #ddd;}
+
+.State .covid .covid_data{
+  font-weight: 400px;
+  width: 100%;
+  border-collapse: collapse;
+  
+
+}
+.State .covid .covid_data td,th,tr{
+  border: 1px solid green;
+  text-align: center;
+  padding: 8px;
+  font-weight: 400px;
+  
+}
+footer {
+  text-align: center;
+  margin-top: 50px;
+  padding: 20px;
+  background-color:#333;
+  color: white;
+  
+}
+.chart{
+    padding-left: 30px;
+    padding-right: 100px;
+    padding-top: 30px;
+}
